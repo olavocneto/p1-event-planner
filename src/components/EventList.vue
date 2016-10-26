@@ -44,10 +44,8 @@
             <td>{{ item.start }}</td>
             <td>{{ item.end }}</td>
             <td>{{ item.location }}</td>
-            <td class="is-icon">
-              <a href="#">
-                <i class="fa fa-twitter"></i>
-              </a>
+            <td>
+              <router-link :to="{ name: 'eventview', params: { event: item } }" class="button is-outlined">View</router-link>
             </td>
           </tr>
         </tbody>
@@ -72,5 +70,4 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-
 </style>

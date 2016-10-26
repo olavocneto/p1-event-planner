@@ -4,6 +4,7 @@ import App from './App';
 import SignUp from './components/SignUp';
 import EventList from './components/EventList';
 import EventAdd from './components/EventAdd';
+import EventView from './components/EventView';
 
 Vue.use(VueRouter);
 
@@ -16,6 +17,9 @@ const routes = [
   },
   {
     path: '/event-add', name: 'eventadd', component: EventAdd,
+  },
+  {
+    path: '/event-view', name: 'eventview', component: EventView,
   },
 ];
 
