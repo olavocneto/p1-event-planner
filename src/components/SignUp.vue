@@ -5,7 +5,7 @@
         <div class="columns is-mobile">
           <div class="column is-half is-offset-one-quarter">
             <div class="heading">
-              <h1 class="title">P1 Event planner</h1>
+              <h1 class="title">Project 1: Meet-Up Event Planner</h1>
               <h2 class="subtitle">
                 web application that allows the user to establish a meet-up event
               </h2>
@@ -150,21 +150,4 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-h1, h2 {
-  font-weight: normal;
-}
-
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-
-a {
-  color: #42b983;
-}
 </style>
