@@ -8,7 +8,7 @@
       <form v-on:submit.prevent="onSubmit" name="eventAddForm">
         <label for="name" class="label">Name of event</label>
         <p class="control has-icon has-icon-right">
-          <input type="text" v-model="newEvent.name" class="input" v-bind:class="{ 'is-danger': !validation.name.isValid() }" id="name" name="name" autofocus required placeholder="World JS Conference 2050">
+          <input type="text" v-model="newEvent.name" class="input" v-on:blur="onBlurInput('name')" v-bind:class="{ 'is-danger': !validation.name.isValid() }" id="name" name="name" autofocus required placeholder="World JS Conference 2050">
 
           <i v-show="!validation.name.isValid()" class="fa fa-warning"></i>
           <span v-show="validation.name.notEmpty" class="help is-danger">Value is required and can't be empty</span>
@@ -16,7 +16,7 @@
 
         <label for="type" class="label">Type</label>
         <p class="control has-icon has-icon-right">
-          <input list="browsers" v-model="newEvent.type" class="input" v-bind:class="{ 'is-danger': !validation.type.isValid() }" id="type" name="type" required placeholder="Conference">
+          <input list="browsers" v-model="newEvent.type" class="input" v-on:blur="onBlurInput('type')" v-bind:class="{ 'is-danger': !validation.type.isValid() }" id="type" name="type" required placeholder="Conference">
           <datalist id="browsers">
             <option value="Birthday party">
             <option value="Conference talk">
@@ -29,15 +29,23 @@
 
         <label for="host" class="label">Host</label>
         <p class="control has-icon has-icon-right">
-          <input type="text" v-model="newEvent.host" class="input" v-bind:class="{ 'is-danger': !validation.host.isValid() }" id="host" name="host" required placeholder="JS Community">
+          <input type="text" v-model="newEvent.host" class="input" v-on:blur="onBlurInput('host')" v-bind:class="{ 'is-danger': !validation.host.isValid() }" id="host" name="host" required placeholder="JS Community">
 
           <i v-show="!validation.host.isValid()" class="fa fa-warning"></i>
           <span v-show="validation.host.notEmpty" class="help is-danger">Value is required and can't be empty</span>
         </p>
 
+        <label for="location" class="label">Location</label>
+        <p class="control has-icon has-icon-right">
+          <input type="text" v-model="newEvent.location" class="input" v-on:blur="onBlurInput('location')" v-bind:class="{ 'is-danger': !validation.location.isValid() }" id="location" name="location" required placeholder="Av. Diário de Notícias, 300, bairro Cristal Porto Alegre/RS, Brazil">
+
+          <i v-show="!validation.location.isValid()" class="fa fa-warning"></i>
+          <span v-show="validation.location.notEmpty" class="help is-danger">Value is required and can't be empty</span>
+        </p>
+
         <label for="start" class="label">Start</label>
         <p class="control has-icon has-icon-right">
-          <input type="datetime-local" v-model="newEvent.start" class="input" v-bind:class="{ 'is-danger': !validation.start.isValid() }" id="start" name="start" required>
+          <input type="datetime-local" v-model="newEvent.start" class="input" v-on:blur="onBlurInput('start')" v-bind:class="{ 'is-danger': !validation.start.isValid() }" id="start" name="start" required>
 
           <i v-show="!validation.start.isValid()" class="fa fa-warning"></i>
           <span v-show="validation.start.notEmpty" class="help is-danger">Value is required and can't be empty</span>
@@ -46,7 +54,7 @@
 
         <label for="end" class="label">End</label>
         <p class="control has-icon has-icon-right">
-          <input type="datetime-local" v-model="newEvent.end" class="input" v-bind:class="{ 'is-danger': !validation.end.isValid() }" id="end" name="end" required>
+          <input type="datetime-local" v-model="newEvent.end" class="input" v-on:blur="onBlurInput('end')" v-bind:class="{ 'is-danger': !validation.end.isValid() }" id="end" name="end" required>
 
           <i v-show="!validation.end.isValid()" class="fa fa-warning"></i>
           <span v-show="validation.end.notEmpty" class="help is-danger">Value is required and can't be empty</span>
@@ -55,17 +63,9 @@
 
         <label class="label" for="guestList">Guest list</label>
         <p class="control">
-          <textarea v-model="newEvent.guestList" class="textarea" id="guestList" name="guestList" placeholder="John, Peter" required></textarea>
+          <textarea v-model="newEvent.guestList" class="textarea" v-on:blur="onBlurInput('guestList')" id="guestList" name="guestList" placeholder="John, Peter" required></textarea>
 
           <span v-show="validation.guestList.notEmpty" class="help is-danger">Value is required and can't be empty</span>
-        </p>
-
-        <label for="location" class="label">Location</label>
-        <p class="control has-icon has-icon-right">
-          <input type="text" v-model="newEvent.location" class="input" v-bind:class="{ 'is-danger': !validation.location.isValid() }" id="location" name="location" required placeholder="Av. Diário de Notícias, 300, bairro Cristal Porto Alegre/RS, Brazil">
-
-          <i v-show="!validation.location.isValid()" class="fa fa-warning"></i>
-          <span v-show="validation.location.notEmpty" class="help is-danger">Value is required and can't be empty</span>
         </p>
 
         <label class="label" for="additionalInfo">Additional information</label>
@@ -102,10 +102,10 @@ export default {
         name: null,
         type: null,
         host: null,
+        location: null,
         start: dateFormatted,
         end: dateFormatted,
         guestList: null,
-        location: null,
         additionalInfo: null,
       },
       formHasError: false,
@@ -129,6 +129,11 @@ export default {
             !this.newEvent.host.trim(),
           isValid: () => !this.validation.host.notEmpty,
         },
+        location: {
+          notEmpty: this.newEvent.location !== null &&
+            !this.newEvent.location.trim(),
+          isValid: () => !this.validation.location.notEmpty,
+        },
         start: {
           notEmpty: this.newEvent.start !== null &&
             !this.newEvent.start.toString().trim(),
@@ -149,11 +154,6 @@ export default {
           notEmpty: this.newEvent.guestList !== null &&
             !this.newEvent.guestList.trim(),
           isValid: () => !this.validation.guestList.notEmpty,
-        },
-        location: {
-          notEmpty: this.newEvent.location !== null &&
-            !this.newEvent.location.trim(),
-          isValid: () => !this.validation.location.notEmpty,
         },
         additionalInfo: {
           isValid: () => true,
@@ -188,6 +188,13 @@ export default {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(events));
 
       this.$router.push('event-list');
+    },
+    onBlurInput(field) {
+      if (this.newEvent[field] === null) {
+        this.newEvent[field] = '';
+      }
+
+      this.validation[field].isValid();
     },
   },
 };

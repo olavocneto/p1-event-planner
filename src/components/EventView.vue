@@ -8,10 +8,10 @@
 
         <p><strong>Type</strong>: {{ $route.params.event.type }}</p>
         <p><strong>Host</strong>: {{ $route.params.event.host }}</p>
+        <p><strong>Location</strong>: {{ $route.params.event.location }}</p>
         <p><strong>Start</strong>: {{ $route.params.event.start }}</p>
         <p><strong>End</strong>: {{ $route.params.event.end }}</p>
         <p><strong>Guest list</strong>: {{ $route.params.event.guestList }}</p>
-        <p><strong>Location</strong>: {{ $route.params.event.location }}</p>
         <p><strong>Additional information</strong>: {{ $route.params.event.additionalInfo }}</p>
 
         <router-link :to="{ name: 'eventlist' }" class="button is-link">Event list</router-link>
