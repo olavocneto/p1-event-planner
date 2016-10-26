@@ -11,19 +11,20 @@
               </h2>
             </div>
 
-            <h3>Sign Up</h3>
-
             <form v-on:submit.prevent="onSubmit" name="signUpForm">
               <label for="name" class="label"></label>
               <p class="control has-icon has-icon-right">
-                <input type="text" v-model="newUser.name" class="input" v-bind:class="{ 'is-danger': !validation.name.isValid() }" id="name" name="name" autofocus required minlength="2" placeholder="Name" autocomplete="name">
+                <input type="text" v-model="newUser.name" class="input" v-bind:class="{ 'is-danger': !validation.name.isValid() }" id="name" name="name" title="Name" autofocus required minlength="2" maxlength="256" placeholder="Name" autocomplete="name" spellcheck="false">
                 <i v-show="!validation.name.isValid()" class="fa fa-warning"></i>
                 <span v-show="validation.name.notEmpty" class="help is-danger">Value is required and can't be empty</span>
+                <span v-show="validation.name.minLength" class="help is-danger">The input is less than 2 characters long</span>
+                <span v-show="validation.name.maxLength" class="help is-danger">The input is more than 20 characters long</span>
+
               </p>
 
               <label for="name" class="label"></label>
               <p class="control has-icon has-icon-right">
-                <input type="email" v-model="newUser.email" class="input" v-bind:class="{ 'is-danger': !validation.email.isValid() }" id="email" name="email" required placeholder="Email" autocomplete="email">
+                <input type="email" v-model="newUser.email" class="input" v-bind:class="{ 'is-danger': !validation.email.isValid() }" id="email" name="email" title="Email" required placeholder="Email" autocomplete="email" spellcheck="false">
                 <i v-show="!validation.email.isValid()" class="fa fa-warning"></i>
                 <span v-show="validation.email.notEmpty" class="help is-danger">Value is required and can't be empty</span>
                 <span v-show="validation.email.emailAddress" class="help is-danger">The input is not a valid email address. Use the basic format local-part@hostname</span>
@@ -31,7 +32,7 @@
 
               <label for="name" class="label"></label>
               <p class="control has-icon has-icon-right">
-                <input type="password" v-model="newUser.password" class="input" v-bind:class="{'is-danger': !validation.password.isValid()}" id="password" name="password" minlength="6" maxlength="100" required placeholder="Password">
+                <input type="password" v-model="newUser.password" class="input" v-bind:class="{'is-danger': !validation.password.isValid()}" id="password" name="password" title="Password" minlength="6" maxlength="100" required placeholder="Password">
                 <i v-show="!validation.password.isValid()" class="fa fa-warning"></i>
                 <span v-show="validation.password.notEmpty" class="help is-danger">Value is required and can't be empty</span>
                 <span v-show="validation.password.minLength" class="help is-danger">The input is less than 6 characters long</span>
@@ -43,8 +44,13 @@
                 <span v-show="validation.password.hasIllegalCharacter" class="help is-danger">Includes illegal character</span>
               </p>
 
+              <label for="bio" class="label"></label>
               <p class="control">
-                <button class="button is-primary">Sign Up</button>
+                <textarea v-model="newUser.bio" class="textarea" id="bio" name="bio" title="Bio" placeholder="Bio"></textarea>
+              </p>
+
+              <p class="control">
+                <button class="button is-primary">Sign up</button>
               </p>
             </form>
 
@@ -67,6 +73,7 @@ export default {
         name: null,
         email: null,
         password: null,
+        bio: null,
       },
       formHasError: false,
     };
@@ -77,7 +84,13 @@ export default {
         name: {
           notEmpty: this.newUser.name !== null &&
             !this.newUser.name.trim(),
-          isValid: () => !this.validation.name.notEmpty,
+          minLength: this.newUser.name !== null &&
+            this.newUser.name.length < 2,
+          maxLength: this.newUser.name !== null &&
+            this.newUser.name.length > 20,
+          isValid: () => !this.validation.name.notEmpty &&
+            !this.validation.name.minLength &&
+            !this.validation.name.maxLength,
         },
         email: {
           notEmpty: this.newUser.email !== null &&
