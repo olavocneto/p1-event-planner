@@ -55,7 +55,7 @@
 
         <label class="label" for="guestList">Guest list</label>
         <p class="control">
-          <textarea v-model="newEvent.guestList" class="textarea" id="guestList" name="guestList" placeholder="John, Peter"></textarea>
+          <textarea v-model="newEvent.guestList" class="textarea" id="guestList" name="guestList" placeholder="John, Peter" required></textarea>
 
           <span v-show="validation.guestList.notEmpty" class="help is-danger">Value is required and can't be empty</span>
         </p>
@@ -177,10 +177,17 @@ export default {
         return;
       }
 
-      const STORAGE_KEY = 'p1-event-planner';
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(this.newEvent));
+      const STORAGE_KEY = 'p1-event-planner-events';
+      let events = JSON.parse(localStorage.getItem(STORAGE_KEY));
+      if (!events) {
+        events = [this.newEvent];
+      } else {
+        events.push(this.newEvent);
+      }
 
-      this.$router.push('list');
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(events));
+
+      this.$router.push('event-list');
     },
   },
 };
