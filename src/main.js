@@ -6,6 +6,8 @@ import EventList from './components/EventList';
 import EventAdd from './components/EventAdd';
 import EventView from './components/EventView';
 
+import './styles/style.scss';
+
 Vue.use(VueRouter);
 
 const routes = [

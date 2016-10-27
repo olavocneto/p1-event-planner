@@ -8,7 +8,7 @@
       <form v-on:submit.prevent="onSubmit" name="eventAddForm">
         <label for="name" class="label">Name of event</label>
         <p class="control has-icon has-icon-right">
-          <input type="text" v-model="newEvent.name" class="input" v-on:blur="onBlurInput('name')" v-bind:class="{ 'is-danger': !validation.name.isValid() }" id="name" name="name" autofocus required placeholder="World JS Conference 2050">
+          <input type="text" v-model="newEvent.name" class="input" v-on:blur="onBlurInput('name')" v-bind:class="{ 'is-danger': !validation.name.isValid() }" id="name" name="name" autofocus v-focus="true" required placeholder="World JS Conference 2050">
 
           <i v-show="!validation.name.isValid()" class="fa fa-warning"></i>
           <span v-show="validation.name.notEmpty" class="help is-danger">Value is required and can't be empty</span>
@@ -50,6 +50,7 @@
           <i v-show="!validation.start.isValid()" class="fa fa-warning"></i>
           <span v-show="validation.start.notEmpty" class="help is-danger">Value is required and can't be empty</span>
           <span v-show="validation.start.dateTime" class="help is-danger">The input does not appear to be a valid datetime</span>
+          <span v-show="validation.start.minDateTime()" class="help is-danger">The input is not greater than today</span>
         </p>
 
         <label for="end" class="label">End</label>
@@ -59,6 +60,7 @@
           <i v-show="!validation.end.isValid()" class="fa fa-warning"></i>
           <span v-show="validation.end.notEmpty" class="help is-danger">Value is required and can't be empty</span>
           <span v-show="validation.end.dateTime" class="help is-danger">The input does not appear to be a valid datetime</span>
+          <span v-show="validation.end.lessThanOrEqualDateTime()" class="help is-danger">The input is not greater than Start</span>
         </p>
 
         <label class="label" for="guestList">Guest list</label>
@@ -88,14 +90,19 @@
 </template>
 
 <script>
+import { mixin as focusMixin } from 'vue-focus';
+
 export default {
   name: 'eventadd',
+  mixins: [
+    focusMixin,
+  ],
   data() {
-    const today = new Date();
-    const day = today.getDate();
-    const month = today.getMonth() + 1;
-    const year = today.getFullYear();
-    const dateFormatted = `${year}-${month}-${day}T00:00`;
+    // const today = new Date();
+    // const day = today.getDate();
+    // const month = today.getMonth() + 1;
+    // const year = today.getFullYear();
+    // const dateFormatted = `${year}-${month}-${day}T00:00`;
 
     return {
       newEvent: {
@@ -103,8 +110,8 @@ export default {
         type: null,
         host: null,
         location: null,
-        start: dateFormatted,
-        end: dateFormatted,
+        start: null,
+        end: null,
         guestList: null,
         additionalInfo: null,
       },
@@ -139,6 +146,13 @@ export default {
             !this.newEvent.start.toString().trim(),
           dateTime: this.newEvent.start !== null &&
             !this.newEvent.start.toString().match(/[0-9]+\-[0-9]+\-[0-9]+T+[0-9]+\:[0-9]{2}/g),
+          minDateTime: () => {
+            const start = new Date(this.newEvent.start);
+            const today = new Date();
+
+            return this.newEvent.start !== null &&
+              start < today;
+          },
           isValid: () => !this.validation.start.notEmpty &&
             !this.validation.start.dateTime,
         },
@@ -147,6 +161,13 @@ export default {
             !this.newEvent.end.trim(),
           dateTime: this.newEvent.end !== null &&
             !this.newEvent.end.match(/[0-9]+\-[0-9]+\-[0-9]+T+[0-9]+\:[0-9]{2}/g),
+          lessThanOrEqualDateTime: () => {
+            const start = new Date(this.newEvent.start);
+            const end = new Date(this.newEvent.end);
+
+            return this.newEvent.start !== null &&
+              end <= start;
+          },
           isValid: () => !this.validation.end.notEmpty &&
             !this.validation.end.dateTime,
         },

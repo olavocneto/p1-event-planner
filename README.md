@@ -23,3 +23,6 @@ For detailed explanation on how things work, checkout the [guide](http://vuejs-t
 * https://developers.google.com/maps/documentation/javascript/examples/places-autocomplete-addressform
 * https://github.com/jayway/vue-js-workshop
 * http://regexr.com/3952i
+* http://sitesforprofit.com/responsive-table-plugins-and-patterns
+* http://codepen.io/NKiD/pen/EyJrvq?editors=1010
+* https://github.com/simplesmiler/vue-focus
