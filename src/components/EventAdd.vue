@@ -8,7 +8,7 @@
       <form v-on:submit.prevent="onSubmit" name="eventAddForm">
         <label for="name" class="label">Name of event</label>
         <p class="control has-icon has-icon-right">
-          <input type="text" v-model="newEvent.name" class="input" v-on:blur="onBlurInput('name')" v-bind:class="{ 'is-danger': !validation.name.isValid() }" id="name" name="name" autofocus v-focus="true" required placeholder="World JS Conference 2050">
+          <input type="text" v-model="newEvent.name" class="input" v-on:blur="onBlurInput('name')" v-bind:class="{ 'is-danger': !validation.name.isValid() }" id="name" name="name" autofocus v-focus="focused" @focus="focused = true" @blur="focused = false" required placeholder="World JS Conference 2050">
 
           <i v-show="!validation.name.isValid()" class="fa fa-warning"></i>
           <span v-show="validation.name.notEmpty" class="help is-danger">Value is required and can't be empty</span>
@@ -116,6 +116,7 @@ export default {
         additionalInfo: null,
       },
       formHasError: false,
+      focused: true,
     };
   },
   computed: {
