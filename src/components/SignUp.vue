@@ -14,7 +14,7 @@
             <form v-on:submit.prevent="onSubmit" name="signUpForm">
               <label for="name" class="label"></label>
               <p class="control has-icon has-icon-right">
-                <input type="text" v-model="newUser.name" class="input" v-on:blur="onBlurInput('name')" v-bind:class="{ 'is-danger': !validation.name.isValid() }" id="name" name="name" title="Name" autofocus v-focus="true" required minlength="2" maxlength="256" placeholder="Name" autocomplete="name" spellcheck="false">
+                <input type="text" v-model="newUser.name" class="input" v-on:blur="onBlurInput('name')" v-bind:class="{ 'is-danger': !validation.name.isValid() }" id="name" name="name" title="Name" autofocus v-focus="focused" @focus="focused = true" @blur="focused = false" required minlength="2" maxlength="256" placeholder="Name" autocomplete="name" spellcheck="false">
                 <i v-show="!validation.name.isValid()" class="fa fa-warning"></i>
                 <span v-show="validation.name.notEmpty" class="help is-danger">Value is required and can't be empty</span>
                 <span v-show="validation.name.minLength" class="help is-danger">The input is less than 2 characters long</span>
@@ -81,6 +81,7 @@ export default {
         bio: null,
       },
       formHasError: false,
+      focused: true,
     };
   },
   computed: {
